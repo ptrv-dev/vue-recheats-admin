@@ -63,5 +63,6 @@ h6 {
 #main {
   padding: 2rem;
   overflow: auto;
+  flex: 1;
 }
 </style>

@@ -1,6 +1,36 @@
 <template>
-  <input type="text" class="input" />
+  <input
+    type="text"
+    class="input"
+    :value="modelValue"
+    @change="onChange"
+    @input="onInput"
+  />
 </template>
+
+<script>
+export default {
+  props: {
+    modelValue: {
+      type: String,
+    },
+    modelModifiers: {
+      default: () => ({}),
+    },
+  },
+  emits: ['update:modelValue'],
+  methods: {
+    onInput(e) {
+      if (!this.modelModifiers.lazy)
+        this.$emit('update:modelValue', e.target.value);
+    },
+    onChange(e) {
+      if (this.modelModifiers.lazy)
+        this.$emit('update:modelValue', e.target.value);
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 @import '@/scss/vars';
