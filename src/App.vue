@@ -1,14 +1,41 @@
 <template>
-  <app-menu />
-  <main id="main"><router-view /></main>
+  <app-menu v-if="isLogged" />
+  <main id="main" v-if="isLogged"><router-view /></main>
+  <login-view v-if="!isLogged" @auth="checkAuth" />
 </template>
 
 <script>
+import appAxios from './appAxios';
+
 import AppMenu from '@/components/AppMenu.vue';
+import LoginView from './views/LoginView.vue';
 
 export default {
   components: {
     AppMenu,
+    LoginView,
+  },
+  data() {
+    return {
+      isLogged: false,
+    };
+  },
+  methods: {
+    async checkAuth() {
+      this.isLogged = false;
+      try {
+        const { data } = await appAxios.get('/get-me');
+        console.log(data);
+        this.isLogged = true;
+        this.$store.dispatch('setUser', data);
+      } catch (error) {
+        console.error(error);
+        alert('Auth error!');
+      }
+    },
+  },
+  mounted() {
+    this.checkAuth();
   },
 };
 </script>
