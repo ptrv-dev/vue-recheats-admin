@@ -28,7 +28,11 @@ export default {
   methods: {
     async fetchPosts() {
       const { data } = await appAxios.get(
-        `/post?search=${this.filter.searchQuery}&page=${this.filter.page}&limit=${this.filter.displayBy}`
+        `/post?search=${this.filter.searchQuery}&page=${
+          this.filter.page
+        }&limit=${this.filter.displayBy}${
+          this.filter.isEditable ? `&author=${this.$store.state.id}` : ``
+        }`
       );
       this.posts = data.data;
       this.maxPage = data.maxPage;
