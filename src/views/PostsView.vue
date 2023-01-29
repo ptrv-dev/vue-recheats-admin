@@ -1,7 +1,7 @@
 <template>
   <div id="post-view">
     <post-form />
-    <post-list v-model:filter="filter" :posts="posts" />
+    <post-list v-model:filter="filter" :posts="posts" :max-page="maxPage" />
   </div>
 </template>
 
@@ -18,18 +18,20 @@ export default {
       filter: {
         searchQuery: '',
         isEditable: true,
-        displayBy: '10',
+        displayBy: '20',
+        page: 1,
       },
+      maxPage: 1,
       posts: [],
-      page: 1,
     };
   },
   methods: {
     async fetchPosts() {
       const { data } = await appAxios.get(
-        `/post?search=${this.filter.searchQuery}&page=${this.page}&limit=${this.filter.displayBy}`
+        `/post?search=${this.filter.searchQuery}&page=${this.filter.page}&limit=${this.filter.displayBy}`
       );
       this.posts = data.data;
+      this.maxPage = data.maxPage;
     },
   },
   mounted() {
@@ -41,9 +43,6 @@ export default {
       handler() {
         this.fetchPosts();
       },
-    },
-    page() {
-      this.fetchPosts();
     },
   },
 };
