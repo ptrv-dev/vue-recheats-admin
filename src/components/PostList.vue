@@ -20,6 +20,7 @@
         </div>
       </div>
     </div>
+    <posts-table :posts="posts" />
   </div>
 </template>
 
@@ -27,15 +28,38 @@
 import AppInput from './AppInput.vue';
 import AppCheckbox from './AppCheckbox.vue';
 import AppSelect from './AppSelect.vue';
+import PostsTable from './PostsTable.vue';
 
 export default {
-  components: { AppInput, AppCheckbox, AppSelect },
+  components: { AppInput, AppCheckbox, AppSelect, PostsTable },
+  props: {
+    filter: {
+      type: Object,
+      required: true,
+    },
+    posts: {
+      type: Array,
+      required: true,
+    },
+  },
+  emits: ['update:filter'],
   data() {
     return {
-      searchQuery: '',
-      isEditable: true,
-      displayBy: '10',
+      searchQuery: this.filter.searchQuery,
+      isEditable: this.filter.isEditable,
+      displayBy: this.filter.displayBy,
     };
+  },
+  watch: {
+    searchQuery(v) {
+      this.$emit('update:filter', { ...this.filter, searchQuery: v });
+    },
+    isEditable(v) {
+      this.$emit('update:filter', { ...this.filter, isEditable: v });
+    },
+    displayBy(v) {
+      this.$emit('update:filter', { ...this.filter, displayBy: v });
+    },
   },
 };
 </script>
@@ -43,6 +67,9 @@ export default {
 <style lang="scss" scoped>
 .post-list {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 .post-list-header {
   display: flex;
