@@ -11,8 +11,8 @@
       <td>{{ idx + 1 }}</td>
       <td>{{ new Date(item.createdAt).toLocaleString() }}</td>
       <td>{{ item.title }}</td>
-      <td>{{ item.category.title }}</td>
-      <td>{{ item.author.username }}</td>
+      <td>{{ item.category?.title || '—' }}</td>
+      <td>{{ item.author?.username || '—' }}</td>
       <td>
         <app-button :small="true" :dark="true">Remove</app-button>
         <app-button :small="true" :dark="true">Edit</app-button>
