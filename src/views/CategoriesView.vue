@@ -4,12 +4,16 @@
       v-model="category"
       :editMode="editMode"
       @create="handleCreate"
-      @edit="handleEdit"
+      @edit="handleEditSave"
       @cancel="handleCancel"
     />
     <div class="category-view__list">
       <h2>Categories list</h2>
-      <category-table :categories="categories" />
+      <category-table
+        :categories="categories"
+        @remove="handleRemove"
+        @edit="handleEdit"
+      />
     </div>
   </div>
 </template>
@@ -48,10 +52,26 @@ export default {
         this.handleCancel();
       }
     },
-    async handleEdit() {},
+    async handleEditSave() {},
     handleCancel() {
       this.editMode = false;
       this.category = '';
+    },
+    async handleRemove(category) {
+      if (
+        !window.confirm('Do you really want to delete a category?') ||
+        !window.confirm('Are your sure?')
+      )
+        return;
+
+      try {
+        await appAxios.delete(`/category/${category._id}`);
+        this.fetchCategories();
+        alert('Category successfully deleted!');
+      } catch (error) {
+        console.error(error);
+        alert('Category remove error...');
+      }
     },
   },
   mounted() {
@@ -65,11 +85,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 2rem;
   &__list {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 }
 </style>
