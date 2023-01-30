@@ -1,7 +1,13 @@
 <template>
   <div id="post-view">
     <post-form v-model="post" @create="handleCreate" />
-    <post-list v-model:filter="filter" :posts="posts" :max-page="maxPage" />
+    <post-list
+      v-model:filter="filter"
+      :posts="posts"
+      :max-page="maxPage"
+      @remove="handleRemove"
+      @edit="handleEdit"
+    />
   </div>
 </template>
 
@@ -79,6 +85,30 @@ export default {
         console.error(error);
         alert('Post create error...');
       }
+    },
+    async handleRemove(post) {
+      if (this.$store.state.level < 2 && post.author !== this.$store.state.id)
+        return alert("You're not the author");
+
+      if (
+        !window.confirm('Do you really want to delete the post?') ||
+        !window.confirm('Are your sure?')
+      )
+        return false;
+
+      try {
+        await appAxios.delete(`/post/${post._id}`);
+        alert('Post successfully deleted!');
+        this.fetchPosts();
+      } catch (error) {
+        console.error(error);
+        alert('Post delete error...');
+      }
+    },
+    async handleEdit(post) {
+      if (this.$store.state.level < 2 && post.author !== this.$store.state.id)
+        return alert("You're not the author");
+      console.log(post);
     },
   },
   computed: {

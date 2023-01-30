@@ -14,8 +14,12 @@
       <td>{{ item.category?.title || '—' }}</td>
       <td>{{ item.author?.username || '—' }}</td>
       <td>
-        <app-button :small="true" :dark="true">Remove</app-button>
-        <app-button :small="true" :dark="true">Edit</app-button>
+        <app-button :small="true" :dark="true" @click="$emit('remove', item)"
+          >Remove</app-button
+        >
+        <app-button :small="true" :dark="true" @click="$emit('edit', item)"
+          >Edit</app-button
+        >
       </td>
     </tr>
   </table>

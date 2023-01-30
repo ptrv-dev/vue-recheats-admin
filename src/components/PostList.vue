@@ -20,7 +20,11 @@
         </div>
       </div>
     </div>
-    <posts-table :posts="posts" />
+    <posts-table
+      :posts="posts"
+      @edit="$emit('edit', $event)"
+      @remove="$emit('remove', $event)"
+    />
     <app-pagination v-model="page" :maxPage="maxPage" />
   </div>
 </template>
@@ -48,7 +52,7 @@ export default {
       required: true,
     },
   },
-  emits: ['update:filter'],
+  emits: ['update:filter', 'remove', 'edit'],
   data() {
     return {
       searchQuery: this.filter.searchQuery,
