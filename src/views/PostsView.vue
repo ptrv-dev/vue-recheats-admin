@@ -1,6 +1,12 @@
 <template>
   <div id="post-view">
-    <post-form v-model="post" @create="handleCreate" />
+    <post-form
+      v-model="post"
+      @create="handleCreate"
+      :edit-mode="editMode"
+      @edit="handleEditSave"
+      @cancel="handleCancelEdit"
+    />
     <post-list
       v-model:filter="filter"
       :posts="posts"
@@ -28,6 +34,7 @@ export default {
         page: 1,
       },
       post: {
+        _id: '',
         image: '',
         title: '',
         description: '',
@@ -36,6 +43,7 @@ export default {
       },
       maxPage: 1,
       posts: [],
+      editMode: false,
     };
   },
   methods: {
@@ -108,7 +116,53 @@ export default {
     async handleEdit(post) {
       if (this.$store.state.level < 2 && post.author !== this.$store.state.id)
         return alert("You're not the author");
+
+      this.editMode = true;
+
+      this.post = {
+        _id: post._id,
+        image: post.image,
+        title: post.title,
+        description: post.description,
+        category: post.category._id,
+        user: post.author._id,
+      };
       console.log(post);
+    },
+    async handleEditSave() {
+      if (!window.confirm('Save the changes you made?')) return;
+
+      if (/blob/.test(this.post.image)) {
+        try {
+          const fileUrl = await this.imageUpload(this.post.image);
+          this.post.image = fileUrl;
+        } catch (error) {
+          console.error(error);
+          alert('Image upload error...');
+        }
+      }
+
+      try {
+        await appAxios.patch(`/post/${this.post._id}`, this.post);
+        this.fetchPosts();
+        alert('Changes have been saved!');
+      } catch (error) {
+        console.error(error);
+        return alert('Post update error...');
+      }
+
+      this.handleCancelEdit();
+    },
+    handleCancelEdit() {
+      this.editMode = false;
+      this.post = {
+        _id: '',
+        image: '',
+        title: '',
+        description: '',
+        category: '',
+        user: '',
+      };
     },
   },
   computed: {

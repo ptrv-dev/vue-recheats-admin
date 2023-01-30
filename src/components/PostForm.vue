@@ -17,9 +17,13 @@
         {{ `${user.username}${user.level > 1 ? '*' : ''}` }}
       </option>
     </app-select>
-    <app-button class="post-form__button" @click="handleCreate"
+    <app-button v-if="!editMode" class="post-form__button" @click="handleCreate"
       >Create</app-button
     >
+    <div class="post-form__row" v-if="editMode">
+      <app-button @click="$emit('edit')">Save</app-button>
+      <app-button @click="$emit('cancel')">Cancel</app-button>
+    </div>
   </div>
 </template>
 
@@ -43,6 +47,10 @@ export default {
     modelValue: {
       type: Object,
       required: true,
+    },
+    editMode: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ['update:modelValue', 'create', 'edit', 'cancel'],
@@ -72,6 +80,13 @@ export default {
     },
     category(v) {
       this.$emit('update:modelValue', { ...this.modelValue, category: v });
+    },
+    modelValue(v) {
+      this.image = v.image;
+      this.title = v.title;
+      this.description = v.description;
+      this.category = v.category;
+      this.user = v.user;
     },
   },
   methods: {
@@ -105,6 +120,12 @@ export default {
   gap: 1rem;
   &__button {
     align-self: center;
+  }
+  &__row {
+    display: inline-flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
   }
 }
 </style>
