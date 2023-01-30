@@ -28,6 +28,7 @@ export default {
   components: { CategoryForm, CategoryTable },
   data() {
     return {
+      id: '',
       category: '',
       editMode: false,
       categories: [],
@@ -52,10 +53,29 @@ export default {
         this.handleCancel();
       }
     },
-    async handleEditSave() {},
+    handleEdit(category) {
+      this.editMode = true;
+      this.category = category.title;
+      this.id = category._id;
+    },
+    async handleEditSave() {
+      if (!window.confirm('Save the changes you made?')) return;
+
+      try {
+        await appAxios.patch(`/category/${this.id}`, { title: this.category });
+        this.fetchCategories();
+        alert('Category successfully changed!');
+      } catch (error) {
+        console.error(error);
+        alert('Category update error...');
+      } finally {
+        this.handleCancel();
+      }
+    },
     handleCancel() {
       this.editMode = false;
       this.category = '';
+      this.id = '';
     },
     async handleRemove(category) {
       if (
