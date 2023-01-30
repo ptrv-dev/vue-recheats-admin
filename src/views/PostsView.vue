@@ -89,6 +89,7 @@ export default {
         });
         this.fetchPosts();
         alert('Post has been successfully created!');
+        this.handleCancelEdit();
       } catch (error) {
         console.error(error);
         alert('Post create error...');
