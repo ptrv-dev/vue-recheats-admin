@@ -1,7 +1,10 @@
 <template>
   <div class="user-form">
-    <h4 class="user-form__title">Create new user</h4>
+    <h4 class="user-form__title">
+      {{ modelValue.id ? 'Update user' : 'Create new user' }}
+    </h4>
     <app-input
+      :modelValue="modelValue.username"
       @input="
         $emit('update:modelValue', {
           ...modelValue,
@@ -11,6 +14,7 @@
       placeholder="username..."
     />
     <app-input
+      :modelValue="modelValue.password"
       @input="
         $emit('update:modelValue', {
           ...modelValue,
@@ -20,6 +24,7 @@
       placeholder="password..."
     />
     <app-input
+      :modelValue="modelValue.link"
       @input="
         $emit('update:modelValue', {
           ...modelValue,
