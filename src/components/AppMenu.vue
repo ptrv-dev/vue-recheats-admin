@@ -49,6 +49,11 @@ export default {
       ],
     };
   },
+  computed: {
+    navigationFiltered() {
+      return this.navigation.map((nav) => nav.level <= this.$store.state.level);
+    },
+  },
 };
 </script>
 

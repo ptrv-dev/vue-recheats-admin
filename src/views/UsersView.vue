@@ -1,6 +1,7 @@
 <template>
   <div class="users-view">
     <user-form
+      v-if="$store.state.level >= 2"
       v-model="user"
       @cancel="handleCancel"
       @edit="handleEditSave"

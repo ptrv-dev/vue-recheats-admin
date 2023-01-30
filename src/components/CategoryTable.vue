@@ -3,7 +3,7 @@
     <th>ID</th>
     <th>Created date</th>
     <th>Title</th>
-    <th>Actions</th>
+    <th v-if="$store.state.level >= 2">Actions</th>
     <tr v-for="(category, idx) in categories" :key="category._id">
       <td>{{ idx + 1 }}</td>
       <td>
@@ -14,7 +14,7 @@
         }}
       </td>
       <td>{{ category.title }}</td>
-      <td>
+      <td v-if="$store.state.level >= 2">
         <app-button small dark @click="$emit('remove', category)"
           >Remove</app-button
         >

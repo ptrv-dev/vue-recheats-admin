@@ -70,6 +70,7 @@ export default {
       return response.data.files[0];
     },
     async handleCreate() {
+      if (this.$store.state.level < 2) this.post.user = this.$store.state.id;
       if (!this.post.image) return alert('Select the image!');
       if (this.post.title.length < 4) return alert('Enter a title!');
       if (this.post.description.length < 4)
@@ -96,7 +97,10 @@ export default {
       }
     },
     async handleRemove(post) {
-      if (this.$store.state.level < 2 && post.author !== this.$store.state.id)
+      if (
+        this.$store.state.level < 2 &&
+        post.author._id !== this.$store.state.id
+      )
         return alert("You're not the author");
 
       if (
@@ -115,7 +119,10 @@ export default {
       }
     },
     async handleEdit(post) {
-      if (this.$store.state.level < 2 && post.author !== this.$store.state.id)
+      if (
+        this.$store.state.level < 2 &&
+        post.author._id !== this.$store.state.id
+      )
         return alert("You're not the author");
 
       this.editMode = true;
@@ -128,7 +135,6 @@ export default {
         category: post.category._id,
         user: post.author._id,
       };
-      console.log(post);
     },
     async handleEditSave() {
       if (!window.confirm('Save the changes you made?')) return;

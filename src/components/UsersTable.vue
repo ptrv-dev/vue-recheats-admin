@@ -3,18 +3,18 @@
     <th>ID</th>
     <th>Created at</th>
     <th>Username</th>
-    <th>Password</th>
+    <th v-if="$store.state.level >= 2">Password</th>
     <th>Link</th>
-    <th>Actions</th>
+    <th v-if="$store.state.level >= 2">Actions</th>
     <tr v-for="(user, idx) in users" :key="user._id">
       <td>{{ idx + 1 }}</td>
       <td>
         {{ user.createdAt ? new Date(user.createdAt).toLocaleString() : '—' }}
       </td>
       <td :class="{ accent: user.level > 1 }">{{ user.username }}</td>
-      <td>{{ user.password }}</td>
+      <td v-if="$store.state.level >= 2">{{ user.password }}</td>
       <td>{{ user.link || '—' }}</td>
-      <td>
+      <td v-if="$store.state.level >= 2">
         <app-button
           v-if="user.level < 2"
           small

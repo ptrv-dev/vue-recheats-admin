@@ -12,7 +12,7 @@
         {{ category.title }}
       </option>
     </app-select>
-    <app-select title="Select user..." v-model="user">
+    <app-select v-if="isAdmin" title="Select user..." v-model="user">
       <option v-for="user in users" :key="user._id" :value="user._id">
         {{ `${user.username}${user.level > 1 ? '*' : ''}` }}
       </option>
@@ -100,6 +100,11 @@ export default {
     async fetchUsers() {
       const { data } = await appAxios.get('/user');
       this.users = data;
+    },
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.state.level > 1;
     },
   },
   mounted() {
