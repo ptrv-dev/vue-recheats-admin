@@ -82,7 +82,7 @@ export default {
 
       try {
         await appAxios.post('/post', {
-          image: fileUrl,
+          image: '\\' + fileUrl,
           title: this.post.title,
           description: this.post.description,
           category: this.post.category,
@@ -142,7 +142,7 @@ export default {
       if (/blob/.test(this.post.image)) {
         try {
           const fileUrl = await this.imageUpload(this.post.image);
-          this.post.image = fileUrl;
+          this.post.image = '\\' + fileUrl;
         } catch (error) {
           console.error(error);
           alert('Image upload error...');
