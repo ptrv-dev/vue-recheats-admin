@@ -90,7 +90,11 @@ export default {
       if (!this.user.password) return alert('Enter a password!');
 
       try {
-        await appAxios.patch(`/user/${this.user.id}`);
+        await appAxios.patch(`/user/${this.user.id}`, {
+          username: this.user.username,
+          password: this.user.password,
+          link: this.user.link,
+        });
         this.fetchUsers();
         alert('User successfully changed!');
       } catch (error) {

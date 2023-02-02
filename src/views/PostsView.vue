@@ -150,7 +150,10 @@ export default {
       }
 
       try {
-        await appAxios.patch(`/post/${this.post._id}`, this.post);
+        await appAxios.patch(`/post/${this.post._id}`, {
+          ...this.post,
+          author: this.post.user,
+        });
         this.fetchPosts();
         alert('Changes have been saved!');
       } catch (error) {
